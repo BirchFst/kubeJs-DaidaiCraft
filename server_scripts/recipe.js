@@ -57,11 +57,9 @@ ServerEvents.recipes(event => {
     event.shaped("storagenetwork:inventory_remote", ["ABA", "CDC", "A A"], { A: "dt:steel_plate", B: "minecraft:glowstone_dust", C: "electrodynamics:ingotsteel", D: "dt:storage_widget" });
     event.shaped("storagenetwork:crafting_remote", ["ABA", "CDC", "A A"], { A: "minecraft:redstone_lamp", B: "minecraft:crafting_table", C: "electrodynamics:resourceblocksteel", D: "dt:storage_widget" });
 
-
-
     let inc = Item.of("dt:gun_widget", { display: { Name: '未知枪体（半成品）' } })
     create.sequenced_assembly(
-        [Item.of("dt:raw_gun_body").withChance(1)], "dt:gun_widget",
+        [Item.of("dt:gp_l").withChance(1)], "dt:gun_widget",
         [
             create.deploying(inc, [inc, "create:cogwheel"]),
             create.deploying(inc, [inc, "minecraft:stone_button"]),
@@ -71,7 +69,7 @@ ServerEvents.recipes(event => {
         ]
     ).transitionalItem(inc).loops(1)
 
-    create.sequenced_assembly([Item.of("dt:raw_cgb").withChance(1)], "dt:gun_widget",
+    create.sequenced_assembly([Item.of("dt:gp_m").withChance(1)], "dt:gun_widget",
         [
             create.deploying(inc, [inc, "create:brass_sheet"]),
             create.deploying(inc, [inc, "create:zinc_sheet"]),
@@ -80,7 +78,7 @@ ServerEvents.recipes(event => {
         ]
     ).transitionalItem(inc).loops(1)
 
-    create.sequenced_assembly([Item.of("dt:raw_hgb").withChance(1)], "dt:gun_widget",
+    create.sequenced_assembly([Item.of("dt:gp_s").withChance(1)], "dt:gun_widget",
         [
             create.deploying(inc, [inc, "minecraft:stone_button"]),
             create.deploying(inc, [inc, "create:brass_sheet"]),
@@ -88,13 +86,265 @@ ServerEvents.recipes(event => {
             create.pressing(inc, inc)
         ]
     ).transitionalItem(inc).loops(1)
-    
+
     // gun bodyddd infix
     let trash = 'dt:steel_plate'
-    let rifles = ['tacz:m16a1', 'tacz:m16a4', 'tacz:sks_tactical', 'tacz:hk_g3', 'tacz:ak47', 'tacz:hk416d', 'tacz:m4a1', 'tacz:mk14']
-    let pistol = ['tacz:p320', 'tacz:deagle', 'tacz:python']
-    let subm = ['tacz:uzi', 'tacz:vector45', 'tacz:hk_mp5a5', 'tacz:ump45']
-    for (i = 0; i < rifles.length; i++) { CreateCutting(Item.of("dt:gun_body", { GunId: rifles[i] }), "dt:raw_gun_body") }
-    for (i = 0; i < pistol.length; i++) { CreateCutting(Item.of("dt:hgb", { GunId: pistol[i] }), "dt:raw_hgb") }
-    for (i = 0; i < subm.length; i++) { CreateCutting(Item.of("dt:cgb", { GunId: subm[i] }), "dt:raw_cgb") }
+    let large = ["tacz:m95",
+        "tacz:ai_awp",
+        "tacz:rpk",
+        "tacz:m249",
+        "tacz:m320",
+        "tacz:rpg7",
+    ]
+    let medium = ["tacz:m16a4",
+        "tacz:hk_g3",
+        "tacz:m16a1",
+        "tacz:m4a1",
+        "tacz:hk416d",
+        "mk16:m4urgi",
+        "tacz:ak47",
+        "tacz:sks_tactical",
+        "tacz:aug",
+        "mk16:aks74u",
+        "tacz:aa12",
+        "gz:sasg_12",
+        "mk16:ak105",
+        "tacz:scar_h",
+        "tacz:scar_l",
+        "tacz:vector45",
+        "tacz:hk_mp5a5",
+        "tacz:ump45",
+        "qkl:lmg31",
+    ]
+    let small = ["tacz:p320",
+        "tacz:cz75",
+        "tacz:deagle_golden",
+        "tacz:glock_17",
+        "suffuse:python",
+        "tacz:deagle",
+        "qkl:csg19",
+        "tacz:uzi",
+    ]
+
+    for (let t = 0; t < 15; t++) {
+        large.push("trash" + t)
+        medium.push("trash" + t)
+        small.push("trash" + t)
+    }
+
+    for (let i = 0; i < large.length; i++) { event.recipes.createCutting(Item.of("dt:gb_l", { GunId: large[i], process: false }), "dt:gp_l") }
+    for (let i = 0; i < small.length; i++) { event.recipes.createCutting(Item.of("dt:gb_s", { GunId: small[i], process: false }), "dt:gp_s") }
+    for (let i = 0; i < medium.length; i++) { event.recipes.createCutting(Item.of("dt:gb_m", { GunId: medium[i], process: false }), "dt:gp_m") }
+
+    // Gun body
+    // Normal medium
+    let guns = ["tacz:m16a4",
+        "tacz:m4a1",
+        "tacz:m16a1",
+        "tacz:sks_tactical",
+        "tacz:aa12",
+        "gz:sasg_12",
+        "mk16:ak105",
+        "tacz:ak47",
+        "mk16:aks74u",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_m", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的中型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_m", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的中型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_m", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.cutting(incomplete, incomplete),
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 50)]),  // 注液
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+            ]
+        ).transitionalItem(incomplete).loops(1)
+    }
+
+    // Complicated medium
+    guns = ["tacz:vector45",
+        "tacz:aug",
+        "mk16:m4urgi",
+        "tacz:hk416d",
+        "tacz:hk_g3",
+        "tacz:scar_l",
+        "tacz:scar_h",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_m", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的中型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_m", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的中型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_m", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+                create.cutting(incomplete, incomplete),
+                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 50)]),  // 注液
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+            ]
+        ).transitionalItem(incomplete).loops(1)
+    }
+
+    // Simple medium
+    guns = ["tacz:hk_mp5a5",
+        "tacz:ump45",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_m", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的中型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_m", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的中型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_m", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+            ]
+        ).transitionalItem(incomplete).loops(1)
+    }
+
+    // Simple small
+    guns = ["tacz:uzi",
+        "qkl:csg19",
+        "tacz:glock_17",
+        "tacz:cz75",
+        "tacz:p320",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_s", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的小型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_s", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的小型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_s", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 50)]),  // 注液
+            ]
+        ).transitionalItem(incomplete).loops(1)
+    }
+
+    // Complicated small
+    guns = ["tacz:deagle_golden",
+        "tacz:deagle",
+        "suffuse:python",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_s", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的小型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_s", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的小型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_s", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 100)]),  // 注液
+                create.pressing(incomplete, incomplete),  // 压片
+            ]
+        ).transitionalItem(incomplete).loops(1)
+    }
+
+    // Normal large
+    guns = ["tacz:rpk",
+        "tacz:m249",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_l", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的大型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_l", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的大型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_l", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+                create.cutting(incomplete, incomplete),
+            ]
+        ).transitionalItem(incomplete).loops(2)
+    }
+
+    // Complicated large
+    guns = ["tacz:ai_awp",
+        "tacz:m95",
+    ]
+
+
+    for (let i = 0; i < guns.length; i++) {
+        let incomplete = Item.of("dt:gb_l", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的大型枪体"}],"text":""}' } })
+        create.sequenced_assembly(
+            [
+                Item.of("dt:gb_l", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的大型枪体"}],"text":""}' } }).withChance(1),
+            ],
+            Item.of("dt:gb_l", { GunId: guns[i], process: false }).weakNBT(),
+            [
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "corail_recycler:diamond_shard"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.pressing(incomplete, incomplete),  // 压片
+                create.cutting(incomplete, incomplete),
+            ]
+        ).transitionalItem(incomplete).loops(2)
+    }
+
+        // Complicated large
+        guns = ["tacz:ai_awp",
+            "tacz:m95",
+        ]
+    
+    
+        for (let i = 0; i < guns.length; i++) {
+            let incomplete = Item.of("dt:gb_l", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的大型枪体"}],"text":""}' } })
+            create.sequenced_assembly(
+                [
+                    Item.of("dt:gb_l", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的大型枪体"}],"text":""}' } }).withChance(1),
+                ],
+                Item.of("dt:gb_l", { GunId: guns[i], process: false }).weakNBT(),
+                [
+                    create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                    create.deploying(incomplete, [incomplete, "corail_recycler:diamond_shard"]),  // 机械手
+                    create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                    create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
+                    create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                    create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                    create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+                    create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                    create.pressing(incomplete, incomplete),  // 压片
+                    create.cutting(incomplete, incomplete),
+                ]
+            ).transitionalItem(incomplete).loops(2)
+        }
 })

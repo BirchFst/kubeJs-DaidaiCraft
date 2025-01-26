@@ -2,14 +2,14 @@
     "item.dt.gun_barrel": "枪管构件",
     "item.dt.steel_plate": "钢板",
     "item.dt.gun_widget": "枪械构件",
-    "item.dt.gun_body": "枪体",
-    "item.dt.hgb": "手枪枪体",
-    "item.dt.cgb": "冲锋枪体",
-    "item.dt.raw_gun_body": "枪体（粗制）",
-    "item.dt.raw_hgb": "手枪枪体（粗制）",
-    "item.dt.raw_cgb": "冲锋枪体（粗制）",
+    "item.dt.gb_l": "大型枪体",
+    "item.dt.gb_s": "小型枪体",
+    "item.dt.gb_m": "中型枪体",
+    "item.dt.gp_l": "大型枪板",
+    "item.dt.gp_s": "小型枪板",
+    "item.dt.gp_m": "中型枪板",
     "item.dt.storage_widget": "存储构件",
-    "item.dt.cm":"镜筒构件",
-    "item.dt.copper_shell":"铜弹壳",
-    "item.dt.copper_shell_mini":"微型铜弹壳"
+    "item.dt.cm": "镜筒构件",
+    "item.dt.copper_shell": "铜弹壳",
+    "item.dt.copper_shell_mini": "微型铜弹壳"
 }
