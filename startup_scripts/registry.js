@@ -1,0 +1,16 @@
+StartupEvents.registry("item", e => {
+    e.create("dt:gun_barrel", "basic")
+    e.create("dt:steel_plate", "basic")
+    e.create("dt:gun_widget", "basic")
+    e.create("dt:gun_body", "basic")
+    e.create("dt:hgb", "basic")
+    e.create('dt:cgb', "basic")
+    e.create("dt:raw_gun_body", "basic")
+    e.create("dt:raw_hgb", "basic")
+    e.create('dt:raw_cgb', "basic")
+    e.create("dt:storage_widget", "basic")
+    e.create("dt:cm", "basic")
+    e.create("dt:copper_shell", "basic")
+    e.create("dt:copper_shell_mini", "basic")
+})
+
