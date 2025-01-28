@@ -258,14 +258,16 @@ ServerEvents.genericLootTables(e => {
                     "tag": "{gunId: \"" + gun[i] + "\",display:{Lore:['{\"italic\":false,\"color\":\"white\",\"extra\":[{\"text\":\"\"},{\"color\":\"light_purple\",\"text\":\"枪械: " + gun[i] + "\"}],\"text\":\"\"}']}}"
                 }
             ],
-            "weight": 2
+            "weight": 1
         })
     }
 
     for (let i = 0; i < lts.length; i++) {
         e.modify(lts[i], loot => {
-            let poolArr = loot.pools.get(0).asJsonObject.get("entries").asJsonArray
-            poolArr.addAll(loot_json)
+            if (loot.pools.length > 0) {
+                let poolArr = loot.pools.get(0).asJsonObject.get("entries").asJsonArray
+                poolArr.addAll(loot_json)
+            }
         })
     }
 })
