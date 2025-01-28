@@ -11,8 +11,10 @@
     "item.dt.gp_l": "大型枪板",
     "item.dt.gp_s": "小型枪板",
     "item.dt.gp_m": "中型枪板",
+    "item.dt.steel_ingot":"钢锭",
     "item.dt.storage_widget": "存储构件",
     "item.dt.cm": "镜筒构件",
     "item.dt.copper_shell": "铜弹壳",
+    "item.dt.dustniter": "硝石粉",
     "item.dt.copper_shell_mini": "微型铜弹壳"
 }

@@ -20,18 +20,16 @@ ServerEvents.recipes(event => {
         event.remove({ output: remove_recipes[i] })
     }
 
-    event.remove({ mod: "electrodynamics" })
-
     // Steel
-    event.recipes.createMixing(['electrodynamics:ingotsteel'], ['minecraft:iron_ingot']).heated()
-    event.blasting('electrodynamics:ingotsteel', { "tag": "forge:ingots/iron" }, 2, 500)
-    event.shapeless("electrodynamics:resourceblocksteel", [
-        'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel',
-        'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel', 'electrodynamics:ingotsteel',
-        'electrodynamics:ingotsteel'
+    event.recipes.createMixing(['dt:steel_ingot'], ['minecraft:iron_ingot']).heated()
+    event.blasting('dt:steel_ingot', { "tag": "forge:ingots/iron" }, 2, 500)
+    event.shapeless("dt:steel_block", [
+        'dt:steel_ingot', 'dt:steel_ingot', 'dt:steel_ingot', 'dt:steel_ingot',
+        'dt:steel_ingot', 'dt:steel_ingot', 'dt:steel_ingot', 'dt:steel_ingot',
+        'dt:steel_ingot'
     ])
-    event.shapeless("9x electrodynamics:ingotsteel", 'electrodynamics:resourceblocksteel')
-    event.recipes.createPressing("dt:steel_plate", "electrodynamics:ingotsteel")
+    event.shapeless("9x dt:steel_ingot", 'dt:steel_ingot')
+    event.recipes.createPressing("dt:steel_plate", "dt:steel_ingot")
 
     // Copper
     event.recipes.createPressing("dt:copper_shell", "create:copper_nugget")
@@ -43,7 +41,7 @@ ServerEvents.recipes(event => {
     event.recipes.createCutting("dt:gun_barrel", "dt:steel_plate")
 
     // Gunpowder
-    event.recipes.createMixing(['6x minecraft:gunpowder'], ['3x electrodynamics:dustniter', '2x vs_tournament:coal_dust', 'electrodynamics:dustsulfur'])  // 火药制作
+    event.recipes.createMixing(['12x minecraft:gunpowder'], ['1x dt:dustniter', '2x vs_tournament:coal_dust', 'minecraft:flint'])  // 火药制作
 
     // Recycler
     event.shaped("corail_recycler:recycler", ["ABA", "BCB", "ADA"], { A: { "tag": "minecraft:planks" }, B: { "tag": "forge:ingots/iron" }, C: { "tag": "forge:chests" }, D: "create:precision_mechanism" })
@@ -53,9 +51,9 @@ ServerEvents.recipes(event => {
 
     // Stroage network
     event.shaped("storagenetwork:master", ["ABA", "BCB", "ABA"], { A: "minecraft:quartz", B: "storagenetwork:kabel", C: "dt:storage_widget" });
-    event.shaped("storagenetwork:kabel", ["AAA", "B B", "AAA"], { A: "minecraft:stone_slab", B: "electrodynamics:ingotsteel" });
-    event.shaped("storagenetwork:inventory_remote", ["ABA", "CDC", "A A"], { A: "dt:steel_plate", B: "minecraft:glowstone_dust", C: "electrodynamics:ingotsteel", D: "dt:storage_widget" });
-    event.shaped("storagenetwork:crafting_remote", ["ABA", "CDC", "A A"], { A: "minecraft:redstone_lamp", B: "minecraft:crafting_table", C: "electrodynamics:resourceblocksteel", D: "dt:storage_widget" });
+    event.shaped("storagenetwork:kabel", ["AAA", "B B", "AAA"], { A: "minecraft:stone_slab", B: "dt:steel_ingot" });
+    event.shaped("storagenetwork:inventory_remote", ["ABA", "CDC", "A A"], { A: "dt:steel_plate", B: "minecraft:glowstone_dust", C: "dt:steel_ingot", D: "dt:storage_widget" });
+    event.shaped("storagenetwork:crafting_remote", ["ABA", "CDC", "A A"], { A: "minecraft:redstone_lamp", B: "minecraft:crafting_table", C: "dt:steel_block", D: "dt:storage_widget" });
     //guns(tacz)
     //gun body's curde
     let inc = Item.of("dt:gun_widget", { display: { Name: '未知枪体（半成品）' } })
@@ -89,7 +87,6 @@ ServerEvents.recipes(event => {
     ).transitionalItem(inc).loops(1)
 
     // gun body 's refined
-    let trash = 'dt:steel_plate'
     let large = ["tacz:m95",
         "tacz:ai_awp",
         "tacz:rpk",
@@ -128,9 +125,9 @@ ServerEvents.recipes(event => {
     ]
 
     for (let t = 0; t < 15; t++) {
-        large.push(trash + t)
-        medium.push(trash + t)
-        small.push(trash + t)
+        large.push("trash" + t)
+        medium.push("trash" + t)
+        small.push("trash" + t)
     }
 
     for (let i = 0; i < large.length; i++) { event.recipes.createCutting(Item.of("dt:gb_l", { GunId: large[i], process: false }), "dt:gp_l") }
@@ -160,6 +157,7 @@ ServerEvents.recipes(event => {
         ]
     ).transitionalItem(inc).loops(1)
     //不是python script！！！inc已经声明过了
+    // BYD 每次都要重新说一遍是吧
     inc = Item.of("dt:gbc_w", { display: { Name: '木制枪筒（半成品）' } })
     create.sequenced_assembly(
         [Item.of("dt:gbc_w").withChance(1)], "dt:gun_barrel",
@@ -222,10 +220,10 @@ ServerEvents.recipes(event => {
             Item.of("dt:gb_m", { GunId: guns[i], process: false }).weakNBT(),
             [
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
                 create.pressing(incomplete, incomplete),  // 压片
                 create.cutting(incomplete, incomplete),
-                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "tconstruct:cobalt_ingot"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
                 create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 50)]),  // 注液
                 create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
@@ -294,7 +292,7 @@ ServerEvents.recipes(event => {
             [
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
                 create.pressing(incomplete, incomplete),  // 压片
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "create:zinc_ingot"]),  // 机械手
                 create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 100)]),  // 注液
                 create.pressing(incomplete, incomplete),  // 压片
             ]
@@ -317,10 +315,10 @@ ServerEvents.recipes(event => {
             [
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
                 create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
-                create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "tconstruct:cobalt_ingot"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "tconstruct:amethyst_bronze_ingot"]),  // 机械手
                 create.pressing(incomplete, incomplete),  // 压片
                 create.cutting(incomplete, incomplete),
             ]
@@ -345,41 +343,37 @@ ServerEvents.recipes(event => {
                 create.deploying(incomplete, [incomplete, "corail_recycler:diamond_shard"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
                 create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
-                create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "tconstruct:amethyst_bronze_ingot"]),  // 机械手
                 create.pressing(incomplete, incomplete),  // 压片
                 create.cutting(incomplete, incomplete),
             ]
         ).transitionalItem(incomplete).loops(2)
     }
 
-    //// Complicated large
-    //guns = ["tacz:ai_awp",
-    //    "tacz:m95",
-    //]
-    //
-    //
-    //for (let i = 0; i < guns.length; i++) {
-    //    let incomplete = Item.of("dt:gb_l", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的大型枪体"}],"text":""}' } })
-    //    create.sequenced_assembly(
-    //        [
-    //            Item.of("dt:gb_l", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的大型枪体"}],"text":""}' } }).withChance(1),
-    //        ],
-    //        Item.of("dt:gb_l", { GunId: guns[i], process: false }).weakNBT(),
-    //        [
-    //            create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
-    //            create.deploying(incomplete, [incomplete, "corail_recycler:diamond_shard"]),  // 机械手
-    //            create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
-    //            create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
-    //            create.deploying(incomplete, [incomplete, "electrodynamics:ingotlead"]),  // 机械手
-    //            create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
-    //            create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
-    //            create.deploying(incomplete, [incomplete, "electrodynamics:ingotaluminum"]),  // 机械手
-    //            create.pressing(incomplete, incomplete),  // 压片
-    //            create.cutting(incomplete, incomplete),
-    //        ]
-    //    ).transitionalItem(incomplete).loops(2)
-    //}
+    // Complicated large
+    guns = ["tacz:m320"]
+    
+    
+    for (let i = 0; i < guns.length; i++) {
+       let incomplete = Item.of("dt:gb_l", { display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工过的大型枪体"}],"text":""}' } })
+       create.sequenced_assembly(
+           [
+               Item.of("dt:gb_l", { GunId: guns[i], process: true, display: { Name: '{"italic":false,"extra":[{"text":""},{"text":"加工完成的大型枪体"}],"text":""}' } }).withChance(1),
+           ],
+           Item.of("dt:gb_l", { GunId: guns[i], process: false }).weakNBT(),
+           [
+               create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
+               create.deploying(incomplete, [incomplete, "corail_recycler:diamond_shard"]),  // 机械手
+               create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 200)]),  // 注液
+               create.deploying(incomplete, [incomplete, "tconstruct:amethyst_bronze_ingot"]),  // 机械手
+               create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手
+               create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
+               create.pressing(incomplete, incomplete),  // 压片
+               create.cutting(incomplete, incomplete),
+           ]
+       ).transitionalItem(incomplete).loops(2)
+    }
 })
