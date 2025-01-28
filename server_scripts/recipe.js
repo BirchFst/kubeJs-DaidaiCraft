@@ -223,7 +223,7 @@ ServerEvents.recipes(event => {
                 create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
                 create.pressing(incomplete, incomplete),  // 压片
                 create.cutting(incomplete, incomplete),
-                create.deploying(incomplete, [incomplete, "tconstruct:cobalt_ingot"]),  // 机械手
+                create.deploying(incomplete, [incomplete, "create:brass_sheet"]),  // 机械手
                 create.deploying(incomplete, [incomplete, "dt:gun_widget"]),  // 机械手
                 create.filling(incomplete, [incomplete, Fluid.of("createbigcannons:molten_steel", 50)]),  // 注液
                 create.deploying(incomplete, [incomplete, "dt:gun_barrel"]),  // 机械手

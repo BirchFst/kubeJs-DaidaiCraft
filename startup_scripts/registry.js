@@ -17,6 +17,8 @@ StartupEvents.registry("item", e => {
     e.create("dt:gbc_l","basic")
     e.create("dt:gbc_w","basic")
 
+    e.create("dt:gun_schematic","basic")
+
     e.create("dt:storage_widget", "basic")
     e.create("dt:copper_shell", "basic")
     e.create("dt:copper_shell_mini", "basic")
